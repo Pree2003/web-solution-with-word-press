@@ -132,7 +132,7 @@ The command successfully created an ext4 filesystem and generated a unique files
 
 The second logical volume, logs-lv, was then formatted using the following command:
 
-sudo mkfs.ext4 /dev/webdata-vg/logs-lv
+sudo mkfs.ext4 /dev/webdata-vg/logs-lv 
 
 This command also completed successfully, creating an ext4 filesystem on the logical volume and assigning it a unique filesystem UUID. The successful completion of both commands confirmed that the logical volumes had been prepared for mounting.
 
@@ -166,6 +166,18 @@ sudo umount /home/recovery/logs
 sudo mount /dev/webdata-vg/logs-lv /var/log
 
 The commands completed successfully without any errors, confirming that the logs-lv logical volume had been mounted to /var/log. Mounting the logical volume to this directory provides dedicated storage for log files, improving storage organization and allowing the log data to be managed independently from the operating system and web application files.
+
+The following command was executed:
+
+sudo mount /dev/webdata-vg/logs-lv /var/log
+
+Before mounting, the logical volume was unmounted from its temporary backup location (/home/recovery/logs) to allow it to be mounted at its intended destination. Once mounted, the /var/log directory began using the dedicated storage provided by the logs-lv logical volume.
+
+Because mounting a filesystem hides the previous contents of the mount point, the earlier backup of the /var/log directory was essential. The backed-up log files can now be restored to the newly mounted logical volume, ensuring that existing system logs remain available while benefiting from dedicated storage.
+
+Suggested screenshot: Terminal output showing the successful unmounting of /home/recovery/logs (if applicable) and the successful mounting of logs-lv to /var/log.
+
+This step completes the storage layout by placing web application files and system log files on separate logical volumes, improving organization, scalability, and maintainability.
 
 
 
