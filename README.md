@@ -171,6 +171,9 @@ The following command was executed:
 
 sudo mount /dev/webdata-vg/logs-lv /var/log
 
+<img width="472" height="63" alt="image" src="https://github.com/user-attachments/assets/2f1ff8a1-68b1-4d14-acc9-b46b15c483a8" />
+
+
 Before mounting, the logical volume was unmounted from its temporary backup location (/home/recovery/logs) to allow it to be mounted at its intended destination. Once mounted, the /var/log directory began using the dedicated storage provided by the logs-lv logical volume.
 
 Because mounting a filesystem hides the previous contents of the mount point, the earlier backup of the /var/log directory was essential. The backed-up log files can now be restored to the newly mounted logical volume, ensuring that existing system logs remain available while benefiting from dedicated storage.
