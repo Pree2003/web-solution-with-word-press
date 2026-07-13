@@ -178,6 +178,19 @@ Before mounting, the logical volume was unmounted from its temporary backup loca
 
 Because mounting a filesystem hides the previous contents of the mount point, the earlier backup of the /var/log directory was essential. The backed-up log files can now be restored to the newly mounted logical volume, ensuring that existing system logs remain available while benefiting from dedicated storage.
 
+To ensure that the logical volumes would be mounted automatically after every system reboot, the UUIDs (Universally Unique Identifiers) of the newly created ext4 filesystems were retrieved using the blkid command. UUIDs provide a persistent method of identifying storage devices, making the mounting process more reliable than referencing device names, which may change after a system restart.
+The following command was executed:
+sudo blkid
+The output displayed information about all block devices attached to the instance, including their UUIDs and filesystem types. The UUIDs of the apps-lv and logs-lv logical volumes were identified and recorded for use in the /etc/fstab configuration file.
+Using UUIDs instead of device names ensures that the correct logical volumes are mounted consistently, even if Linux assigns different device names after a reboot
+
+
+
+
+
+
+
+
 
 
 
