@@ -156,6 +156,16 @@ sudo mount /dev/webdata-vg/logs-lv /home/recovery/logs/
 The command completed successfully without any errors, indicating that the logs-lv logical volume had been mounted successfully. From this point onward, the /home/recovery/logs directory uses the storage allocated to the logs-lv logical volume.
 Mounting a dedicated logical volume for log storage helps separate application data from system logs, making storage management more organized and improving maintainability and data recovery.
 
+<img width="554" height="511" alt="image" src="https://github.com/user-attachments/assets/a82d59e5-2c7b-4f0d-8e6a-80e5a35fc807" />
+
+After backing up the existing log files, the logs-lv logical volume was prepared for its permanent mount location. The logical volume was initially unmounted from the temporary backup directory (/home/recovery/logs) and then mounted to the /var/log directory, which is the default location for Linux system and application log files.
+
+The following commands were executed:
+
+sudo umount /home/recovery/logs
+sudo mount /dev/webdata-vg/logs-lv /var/log
+
+The commands completed successfully without any errors, confirming that the logs-lv logical volume had been mounted to /var/log. Mounting the logical volume to this directory provides dedicated storage for log files, improving storage organization and allowing the log data to be managed independently from the operating system and web application files.
 
 
 
