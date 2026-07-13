@@ -138,6 +138,27 @@ This command also completed successfully, creating an ext4 filesystem on the log
 
 Formatting the logical volumes is a critical step because it transforms the raw storage provided by the Logical Volume Manager into filesystems that Linux can mount and use for storing application data and log files.
 
+<img width="554" height="464" alt="image" src="https://github.com/user-attachments/assets/0e4f9677-bd0c-454d-a3dd-e578a09f2817" />
+
+Before mounting the logs-lv logical volume, the contents of the system log directory (/var/log) were backed up to the /home/recovery/logs directory using the rsync utility. This precaution ensures that the existing log files are preserved because mounting a filesystem on a directory temporarily hides any files already stored in that directory.
+The following command was executed:
+sudo rsync -av /var/log/ /home/recovery/logs/
+The rsync command successfully copied the contents of the /var/log directory, including system logs, audit logs, package management logs, authentication logs, and other important log files. The -a (archive) option preserved file permissions, ownership, timestamps, symbolic links, and directory structure, while the -v (verbose) option displayed detailed information about the synchronization process.
+A second execution of the rsync command synchronized only the log files that had changed since the initial backup, demonstrating rsync's incremental synchronization capability and ensuring that the backup contained the most recent log data before the logical volume was mounted.
+
+<img width="553" height="215" alt="image" src="https://github.com/user-attachments/assets/2a6553e3-2ed4-4a69-be60-d3803344d425" />
+
+<img width="554" height="35" alt="image" src="https://github.com/user-attachments/assets/84a7cef8-34db-419e-8b21-20827570454f" />
+
+After backing up the log files, the logs-lv logical volume was mounted to the /home/recovery/logs directory. Mounting the logical volume associates the newly created ext4 filesystem with the designated mount point, providing dedicated storage for log data.
+The following command was executed:
+sudo mount /dev/webdata-vg/logs-lv /home/recovery/logs/
+The command completed successfully without any errors, indicating that the logs-lv logical volume had been mounted successfully. From this point onward, the /home/recovery/logs directory uses the storage allocated to the logs-lv logical volume.
+Mounting a dedicated logical volume for log storage helps separate application data from system logs, making storage management more organized and improving maintainability and data recovery.
+
+
+
+
 
 
 
