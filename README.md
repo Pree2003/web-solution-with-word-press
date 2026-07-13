@@ -71,4 +71,58 @@ sudo pvcreate /dev/nvme3n1p1
 After creating the physical volumes, the pvs command was executed to verify that LVM successfully recognized them. The output confirmed that the three partitions had been initialized as physical volumes and that each contained approximately 10 GiB of unallocated space available for use in a Volume Group.
 The following command was executed:sudo pvs
 
+<img width="522" height="240" alt="image" src="https://github.com/user-attachments/assets/4019eb63-ce55-453b-99b2-43d1f21e63ef" />
+
+After successfully creating the three LVM physical volumes, the next step was to create a Volume Group (VG) named webdata-vg. During the initial attempt, the Volume Group was created using only the first physical volume (/dev/nvme1n1p1). As a result, subsequent attempts to execute the vgcreate command returned a message indicating that the Volume Group already existed.
+
+The following command was executed:
+
+sudo vgcreate webdata-vg /dev/nvme1n1p1
+
+The system returned the following confirmation:
+
+Volume group "webdata-vg" successfully created
+
+Since the Volume Group had already been created, the remaining physical volumes were added using the vgextend command instead of vgcreate.
+
+The following commands were executed:
+
+sudo vgextend webdata-vg /dev/nvme2n1p1
+sudo vgextend webdata-vg /dev/nvme3n1p1
+
+The system confirmed that the Volume Group was successfully extended to include all three physical volumes.
+
+<img width="351" height="76" alt="image" src="https://github.com/user-attachments/assets/63887a0b-5793-4bce-9bff-cdb2e38df741" />
+
+After creating and configuring the Volume Group, the vgs command was executed to verify that the Logical Volume Manager (LVM) successfully recognized the Volume Group and its associated physical volumes. The verification confirmed that the Volume Group webdata-vg was created successfully and consisted of three physical volumes, with all storage space available for future logical volume allocation.
+The following command was executed:
+sudo vgs
+<img width="638" height="158" alt="image" src="https://github.com/user-attachments/assets/e16029eb-f4be-46a3-aa2f-c20ae1c16a6b" />
+
+After successfully creating the Volume Group (webdata-vg), the next step was to create Logical Volumes (LVs). Two logical volumes were created from the available storage pool within the Volume Group. The first logical volume, named apps-lv, was allocated 14 GiB of storage to host the web application data. The second logical volume, named logs-lv, was also allocated 14 GiB of storage and was designated for storing log files. Together, these logical volumes provide a structured and flexible storage layout that separates application data from system logs.
+The following commands were executed:
+sudo lvcreate -n apps-lv -L 14G webdata-vg
+sudo lvcreate -n logs-lv -L 14G webdata-vg
+
+The system successfully created both logical volumes, confirming that the requested storage was allocated from the webdata-vg Volume Group.
+
+<img width="639" height="207" alt="image" src="https://github.com/user-attachments/assets/3104384b-f61b-4253-ac7c-5c394cb57a43" />
+
+After creating the Physical Volumes (PVs), Volume Group (VG), and Logical Volumes (LVs), the complete Logical Volume Manager (LVM) configuration was verified. Verification was performed using the pvs, vgs, and lvs commands to ensure that all storage components were correctly configured and linked together.
+The following commands were executed:
+sudo pvssudo vgssudo lvs
+The verification confirmed that the three physical volumes were successfully added to the webdata-vg Volume Group and that two logical volumes, apps-lv and logs-lv, had been created with a capacity of 14 GiB each. The Volume Group provided approximately 30 GiB of storage, with the remaining unallocated space reserved for future expansion.
+
+<img width="444" height="294" alt="image" src="https://github.com/user-attachments/assets/4a518799-90b9-4aa3-b741-0ea55335c828" />
+
+After verifying the Logical Volume Manager (LVM) configuration, the lsblk command was executed to display the complete storage hierarchy of the system. This command provides a tree view of the block devices, including physical disks, partitions, and logical volumes.
+The following command was executed:
+sudo lsblk
+The output confirmed that the three attached EBS volumes had been partitioned and incorporated into the webdata-vg Volume Group. It also showed the logical volumes apps-lv and logs-lv, verifying that the storage hierarchy had been configured successfully and was ready for filesystem creation and mounting.
+
+
+
+
+
+
 
