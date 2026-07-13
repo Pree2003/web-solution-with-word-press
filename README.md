@@ -120,6 +120,27 @@ The following command was executed:
 sudo lsblk
 The output confirmed that the three attached EBS volumes had been partitioned and incorporated into the webdata-vg Volume Group. It also showed the logical volumes apps-lv and logs-lv, verifying that the storage hierarchy had been configured successfully and was ready for filesystem creation and mounting.
 
+<img width="558" height="435" alt="image" src="https://github.com/user-attachments/assets/7253d5c2-642c-4897-a051-7029418bb67a" />
+
+After creating the logical volumes, the next step was to create a filesystem on each volume so that they could be mounted and used by the operating system. The ext4 filesystem was selected because it is the default and one of the most widely used journaling filesystems on Linux, offering reliability, stability, and good performance.
+
+The logical volume apps-lv was formatted first using the following command:
+
+sudo mkfs.ext4 /dev/webdata-vg/apps-lv
+
+The command successfully created an ext4 filesystem and generated a unique filesystem UUID for the logical volume. During the formatting process, the filesystem metadata, inode tables, journal, and superblocks were created successfully, indicating that the logical volume was ready for use.
+
+The second logical volume, logs-lv, was then formatted using the following command:
+
+sudo mkfs.ext4 /dev/webdata-vg/logs-lv
+
+This command also completed successfully, creating an ext4 filesystem on the logical volume and assigning it a unique filesystem UUID. The successful completion of both commands confirmed that the logical volumes had been prepared for mounting.
+
+Formatting the logical volumes is a critical step because it transforms the raw storage provided by the Logical Volume Manager into filesystems that Linux can mount and use for storing application data and log files.
+
+
+
+
 
 
 
