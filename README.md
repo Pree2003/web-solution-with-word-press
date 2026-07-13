@@ -187,6 +187,26 @@ sudo blkid
 The output displayed information about all block devices attached to the instance, including their UUIDs and filesystem types. The UUIDs of the apps-lv and logs-lv logical volumes were identified and recorded for use in the /etc/fstab configuration file.
 Using UUIDs instead of device names ensures that the correct logical volumes are mounted consistently, even if Linux assigns different device names after a reboot
 
+<img width="554" height="317" alt="image" src="https://github.com/user-attachments/assets/58a0edf8-af74-498e-ac29-83589ca13b65" />
+
+To ensure that the logical volumes are mounted automatically whenever the server restarts, the /etc/fstab configuration file was updated using the UUIDs of the newly created ext4 filesystems. UUIDs provide a persistent method of identifying storage devices and are preferred over device names because device names may change after a system reboot.
+The /etc/fstab file was opened using the following command:
+sudo vi /etc/fstab
+The UUIDs of the apps-lv and logs-lv logical volumes were then added to the file, associating each filesystem with its respective mount point (/var/www/html and /var/log). After saving the file, the system configuration was reloaded to recognize the updated mount settings.
+The following commands were executed:
+sudo systemctl daemon-reloadsudo mount -a
+The mount -a command completed successfully without any errors, confirming that the /etc/fstab configuration was valid and that the logical volumes could be mounted automatically during system startup.
+To verify the configuration, the df -h command was executed:
+df -h
+The output confirmed that both logical volumes had been mounted successfully. The apps-lv logical volume was mounted on /var/www/html, while the logs-lv logical volume was mounted on /var/log. This verification demonstrated that the storage configuration was functioning correctly and would persist after future server reboots.
+
+
+
+
+
+
+
+
 
 
 
