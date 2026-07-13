@@ -15,3 +15,60 @@ Three additional 10 GiB EBS volumes (nvme1n1, nvme2n1, and nvme3n1) were success
 The additional disks are available for the next stage of the project, which involves partitioning the disks and configuring storage.
 
 <img width="579" height="190" alt="image" src="https://github.com/user-attachments/assets/2144ac86-5977-438c-a87c-ca5eedc1f294" />
+
+After confirming that the operating system detected the attached EBS volumes using the lsblk command, the df -h command was executed to display the mounted file systems and their disk usage.
+The output confirms that the Red Hat Enterprise Linux operating system is installed on the root partition (/dev/nvme0n1p3), which is mounted on the root directory (/). At this stage, only the operating system partitions are mounted because the three newly attached EBS volumes have not yet been partitioned, formatted, or mounted. These additional volumes will be configured in the subsequent steps of the project for RAID and WordPress data storage. 
+
+<img width="554" height="442" alt="image" src="https://github.com/user-attachments/assets/609b3bbd-1e2e-4109-a75f-68f3886958f3" />
+
+After verifying that the three EBS volumes were successfully attached to the Web Server instance, the next step was to partition the disks. The project tutorial used the gdisk utility; however, on the Red Hat Enterprise Linux 10.2 instance used for this project, the gdisk package was not available. As an alternative, the parted utility was used to create a GUID Partition Table (GPT) and a single primary partition on each disk.
+The first EBS volume (/dev/nvme1n1) was partitioned using this commands:
+sudo parted /dev/nvme1n1 
+
+Within the parted interactive utility, the following commands were executed:
+mklabel gpt
+mkpart primary 0% 100%
+print
+quit
+The print command confirmed that a GPT partition table had been created successfully and that a single primary partition occupied the entire disk.
+
+<img width="501" height="350" alt="image" src="https://github.com/user-attachments/assets/d37ca60d-644b-40a3-b95f-03c971b6d1d8" /> 
+
+After successfully partitioning the first EBS volume, the same procedure was repeated for the second EBS volume (/dev/nvme2n1) using the GNU Parted utility. A GPT partition table was created, followed by a single primary partition occupying the entire disk.
+The following command was executed:sudo parted /dev/nvme2n1
+
+<img width="449" height="345" alt="image" src="https://github.com/user-attachments/assets/69534b64-c91d-463d-bfec-d425706050a6" />
+
+The partitioning procedure was then repeated for the third EBS volume (/dev/nvme3n1). A GPT partition table and one primary partition were created using the GNU Parted utility.
+The following command was executed:sudo parted /dev/nvme3n1
+
+<img width="373" height="231" alt="image" src="https://github.com/user-attachments/assets/290a66ac-716c-45b1-b30d-2259780ea910" />
+
+After partitioning all three EBS volumes, the lsblk command was executed to verify that the Linux operating system recognized the newly created partitions.
+
+<img width="553" height="141" alt="image" src="https://github.com/user-attachments/assets/b6c13aec-7b79-4f43-a339-1278713382d4" />
+
+The Logical Volume Manager (LVM2) package was verified on the Red Hat Enterprise Linux Web Server to ensure that the tools required for creating and managing logical volumes were available. The yum package manager was used to install the package. The output indicated that LVM2 was already installed on the system; therefore, no additional installation was required. This confirmed that the server was ready for the subsequent stages of configuring physical volumes, volume groups, and logical volumes.
+The following command was executed:
+sudo yum install lvm2
+
+<img width="342" height="185" alt="image" src="https://github.com/user-attachments/assets/c6c6ff28-b743-49c1-afb1-9c21593bc206" />
+
+After confirming that the LVM2 package was available, the lvmdiskscan utility was executed to scan the system for disks and partitions that could be used for Logical Volume Manager (LVM) configuration. The scan identified the root system partitions as well as the three newly created partitions on the attached EBS volumes (/dev/nvme1n1p1, /dev/nvme2n1p1, and /dev/nvme3n1p1). At this stage, the output indicated that no LVM physical volumes had been created, which was expected because the partitions had not yet been initialized as physical volumes. This verification confirmed that the storage devices were correctly partitioned and ready for the next step of creating LVM physical volumes.
+The following command was executed:
+sudo lvmdiskscan
+
+<img width="428" height="123" alt="image" src="https://github.com/user-attachments/assets/505c7396-1c0f-4b42-9749-b3c8308b33a0" />
+
+After partitioning the three attached EBS volumes, each partition was initialized as a Logical Volume Manager (LVM) Physical Volume (PV) using the pvcreate command. This step prepares the partitions for inclusion in a Volume Group (VG), which is the next stage of the LVM storage configuration.
+The following commands were executed:
+sudo pvcreate /dev/nvme1n1p1
+sudo pvcreate /dev/nvme2n1p1
+sudo pvcreate /dev/nvme3n1p1
+
+<img width="330" height="111" alt="image" src="https://github.com/user-attachments/assets/a1266b8e-a1f8-4285-a69e-82b9c5069331" />
+
+After creating the physical volumes, the pvs command was executed to verify that LVM successfully recognized them. The output confirmed that the three partitions had been initialized as physical volumes and that each contained approximately 10 GiB of unallocated space available for use in a Volume Group.
+The following command was executed:sudo pvs
+
+
