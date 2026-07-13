@@ -175,9 +175,7 @@ Before mounting, the logical volume was unmounted from its temporary backup loca
 
 Because mounting a filesystem hides the previous contents of the mount point, the earlier backup of the /var/log directory was essential. The backed-up log files can now be restored to the newly mounted logical volume, ensuring that existing system logs remain available while benefiting from dedicated storage.
 
-Suggested screenshot: Terminal output showing the successful unmounting of /home/recovery/logs (if applicable) and the successful mounting of logs-lv to /var/log.
 
-This step completes the storage layout by placing web application files and system log files on separate logical volumes, improving organization, scalability, and maintainability.
 
 
 
