@@ -202,6 +202,34 @@ The output confirmed that both logical volumes had been mounted successfully. Th
 
 <img width="554" height="131" alt="image" src="https://github.com/user-attachments/assets/265e1f17-e98e-4e47-a040-8df4ece9cbb7" />
 
+After creating the three 10 GiB Amazon Elastic Block Store (EBS) volumes in the same Availability Zone as the Web Server EC2 instance, each volume was attached individually to the Red Hat Enterprise Linux Web Server using the AWS Management Console.To ensure successful attachment, each EBS volume was assigned a unique device name during the attachment process. 
+
+<img width="554" height="144" alt="image" src="https://github.com/user-attachments/assets/ac5d2386-cf26-44d4-82c0-541905d61a27" />
+
+<img width="553" height="129" alt="image" src="https://github.com/user-attachments/assets/2fdd9673-9863-4fd7-b9fb-d4943e8cbc20" />
+
+To allow the WordPress web server to communicate securely with the remote MariaDB database, an inbound security group rule was configured on the DB Server. The MySQL/Aurora service was selected, which automatically uses TCP port 3306, the default port for MySQL and MariaDB database connections. For security purposes, access was restricted to the private IP address of the Web Server (172.31.46.164/32) instead of allowing connections from the public internet. This configuration ensured that only the authorized web server could establish a connection to the database server, protecting the database from unauthorized access.
+
+<img width="383" height="574" alt="image" src="https://github.com/user-attachments/assets/a3f3bab9-b1fd-4d55-ad99-adf122bbcb52" />
+
+The wp-config.php file was edited to configure WordPress to connect to the remote MariaDB database server. The default database configuration values were replaced with the actual database name, username, password, and the private IP address of the database server. The database name was set to wordpress, the database user to myuser, the password to mypass, and the database host to the private IP address 172.31.44.1. The database character set remained utf8mb4, which supports a wide range of Unicode characters, while the default collation setting was retained. These settings enable WordPress to establish a secure connection to the remote database during the installation and normal operation of the website.
+
+<img width="554" height="469" alt="image" src="https://github.com/user-attachments/assets/d3f5b501-7a56-42fd-abe0-169837f3b1b1" />
+<img width="554" height="440" alt="image" src="https://github.com/user-attachments/assets/dfd7317c-757a-4ad2-ab9a-e07d45104220" />
+<img width="434" height="498" alt="image" src="https://github.com/user-attachments/assets/1837473d-852d-4b19-ba93-8b9d4dae1cb2" />
+<img width="554" height="266" alt="image" src="https://github.com/user-attachments/assets/3ffc0ff1-4763-42ed-b154-3339ad43695e" />
+
+After configuring the web server, connecting WordPress to the remote MariaDB database, and restarting the Apache service, the WordPress installation page was accessed through the web browser using the public IP address of the Web Server followed by /wordpress. The successful display of the WordPress five-minute installation wizard confirmed that Apache, PHP, the WordPress application, and the remote database connection were all configured correctly. The installation was completed by providing the site title, administrator username, password, and email address, after which WordPress was successfully deployed and ready for use.
+
+
+
+
+
+
+
+
+
+
 
 
 
