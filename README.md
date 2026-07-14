@@ -200,6 +200,7 @@ To verify the configuration, the df -h command was executed:
 df -h
 The output confirmed that both logical volumes had been mounted successfully. The apps-lv logical volume was mounted on /var/www/html, while the logs-lv logical volume was mounted on /var/log. This verification demonstrated that the storage configuration was functioning correctly and would persist after future server reboots.
 
+<img width="554" height="131" alt="image" src="https://github.com/user-attachments/assets/265e1f17-e98e-4e47-a040-8df4ece9cbb7" />
 
 
 
